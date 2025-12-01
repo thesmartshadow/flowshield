@@ -1,0 +1,12 @@
+{
+  "columns": [
+    {"name": "duration", "dtype": "float", "minimum": 0, "non_negative": true, "description": "Flow duration seconds"},
+    {"name": "packets", "dtype": "int", "minimum": 0, "integer_only": true, "description": "Packet count"},
+    {"name": "bytes", "dtype": "int", "minimum": 0, "integer_only": true, "description": "Byte count"},
+    {"name": "p25", "dtype": "float", "minimum": 0, "description": "Latency p25"},
+    {"name": "p50", "dtype": "float", "minimum": 0, "description": "Latency p50"},
+    {"name": "p75", "dtype": "float", "minimum": 0, "description": "Latency p75"},
+    {"name": "p95", "dtype": "float", "minimum": 0, "description": "Latency p95"},
+    {"name": "p99", "dtype": "float", "minimum": 0, "description": "Latency p99"}
+  ]
+}
