@@ -1,0 +1,26 @@
+import numpy as np
+import pandas as pd
+from pathlib import Path
+
+Path("examples").mkdir(exist_ok=True)
+
+rng = np.random.default_rng(1337)
+n = 300
+
+df = pd.DataFrame({
+    "duration": np.abs(rng.normal(2.0, 1.2, n)),
+    "packets": np.abs(rng.normal(20, 10, n)),
+    "bytes":   np.abs(rng.normal(15000, 8000, n)),
+    "p50":     np.abs(rng.normal(10, 5, n)),
+    "p95":     np.abs(rng.normal(30, 12, n)),
+})
+
+# Inject a few invalid rows to test FlowShield output
+df.loc[0, "duration"] = -5
+df.loc[1, "bytes"] = -100
+df.loc[2, "p95"] = -1
+df.loc[3, "packets"] = np.nan
+
+out = Path("examples/flows.csv")
+df.to_csv(out, index=False)
+print("Wrote:", out.resolve(), "rows:", len(df))
