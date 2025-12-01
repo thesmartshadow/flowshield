@@ -18,18 +18,18 @@ Requires Python 3.11+, pandas, numpy, pydantic v2, and typer. No network calls a
 ## Quickstart
 1. Initialize a schema template:
 ```bash
-flowshield init-schema --columns duration,packets,bytes,p50,p95 --out schema.json
+flowshield init-schema "duration,packets,bytes,p50,p95" --out schema.json
 ```
 
 2. Validate a dataset:
 ```bash
-flowshield validate --data flows.csv --schema schema.json --profile flow_safe --out report.md
+flowshield validate examples/flows.csv schema.json flow_safe --out report.md
 ```
 Exit code is `2` when any error-level violations are detected.
 
 3. Repair a dataset:
 ```bash
-flowshield repair --data flows.csv --schema schema.json --profile flow_safe --out repaired.csv --report repair_report.json
+flowshield repair  examples/flows.csv schema.json flow_safe --out repaired.csv --report repair_report.json
 ```
 
 ## Profiles and relation rules
