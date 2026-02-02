@@ -1,47 +1,77 @@
 # FlowShield
 
-FlowShield is a constraints, validation, and repair toolkit for tabular network-flow feature vectors used in machine-learning Intrusion Detection Systems (IDS). It keeps feature vectors realistic after preprocessing, augmentation, adversarial simulation, data integration, or telemetry sampling artifacts. FlowShield is defensive and educational only.
+**FlowShield** is a high-performance framework designed for the validation, constraint enforcement, and automated repair of tabular network-flow feature vectors. Engineered specifically for Machine Learning-based Intrusion Detection Systems (IDS), it ensures that feature vectors remain architecturally sound and statistically realistic following data augmentation, adversarial simulations, or telemetry sampling artifacts.
 
-## Why FlowShield
-Network-flow features often drift or become inconsistent during data engineering. FlowShield helps researchers and engineers maintain realistic telemetry by:
-- Declaring a feature schema with datatypes, ranges, and expectations.
-- Applying constraint profiles that encode validation and repair strategies.
-- Producing audit-ready reports for reproducible experiments.
+## Core Value Proposition
 
-## Installation
+In the lifecycle of IDS data engineering, network-flow features often suffer from drift or logical inconsistencies. FlowShield provides a robust layer of defense by:
+
+* **Schema Enforcement:** Defining rigorous data types, value ranges, and statistical expectations.
+* **Constraint Profiles:** Implementing programmable validation and repair strategies to maintain telemetry realism.
+* **Auditability:** Generating comprehensive, audit-ready reports to ensure reproducibility in scientific experiments and production pipelines.
+
+---
+
+## Technical Specifications & Installation
+
+FlowShield is built for local execution with zero external network dependencies, ensuring data privacy and operational integrity.
+
+**Requirements:** Python 3.11+, Pandas, NumPy, Pydantic v2, Typer.
+
 ```bash
 pip install .
+
 ```
 
-Requires Python 3.11+, pandas, numpy, pydantic v2, and typer. No network calls are made.
+---
 
-## Quickstart
-1. Initialize a schema template:
+## Operational Workflow
+
+### 1. Schema Initialization
+
+Generate a standardized schema template defining the feature space:
+
 ```bash
 flowshield init-schema "duration,packets,bytes,p50,p95" --out schema.json
+
 ```
 
-2. Validate a dataset:
+### 2. Rigorous Validation
+
+Evaluate datasets against defined constraints. The system returns an exit code `2` upon detecting critical violations to facilitate CI/CD integration:
+
 ```bash
 flowshield validate examples/flows.csv schema.json flow_safe --out report.md
-```
-Exit code is `2` when any error-level violations are detected.
 
-3. Repair a dataset:
+```
+
+### 3. Automated Repair
+
+Execute heuristic-based repairs to sanitize inconsistent telemetry and restore feature logic:
+
 ```bash
-flowshield repair  examples/flows.csv schema.json flow_safe --out repaired.csv --report repair_report.json
+flowshield repair examples/flows.csv schema.json flow_safe --out repaired.csv --report repair_report.json
+
 ```
 
-## Profiles and relation rules
-FlowShield ships with built-in profiles:
-- **flow_safe**: Conservative clipping and median imputation.
-- **strict_flow**: Strict bounds; rejects missing values; enforces percentile ordering.
-- **telemetry_noisy**: Aggressive repairs and imputation for noisy telemetry.
+---
 
-Relation rules capture cross-feature expectations such as sum bounds, order relations, ratios, conditional expectations, and non-decreasing percentile groups.
+## Logic Profiles & Relational Constraints
 
-## Safety note
-FlowShield is designed for defensive validation and repair of IDS features. It does not offer offensive capabilities and performs no network access.
+FlowShield utilizes predefined profiles to handle varying levels of data integrity:
 
-## Author
-Zaid Abdullah Khalil
+| Profile | Description | Strategy |
+| --- | --- | --- |
+| `flow_safe` | Standard baseline | Conservative clipping and median imputation. |
+| `strict_flow` | High-fidelity | Enforces absolute bounds; rejects nulls; strict ordering. |
+| `telemetry_noisy` | Robust recovery | Aggressive repairs and imputation for unstable telemetry. |
+
+The engine validates **Relation Rules**, which govern complex dependencies such as sum-bounds, ratios, conditional expectations, and monotonic percentile sequences (e.g., ).
+
+---
+
+## Compliance and Safety Note
+
+FlowShield is strictly a defensive utility for IDS feature engineering and academic research. It contains no offensive capabilities and operates entirely within an isolated local environment with no outbound network access.
+
+**Author:** Ali Firas - thesmartshadow
